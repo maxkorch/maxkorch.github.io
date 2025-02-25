@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата квитка Яктак</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+        h1 {
+            color: #2D8E49;
+            font-size: 36px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+        input, select, button {
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #2D8E49;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        button:hover {
+            background-color: #24863C;
+        }
+        .copy-button {
+            background-color: #2D8E49;
+            color: white;
+            font-size: 18px;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            font-weight: bold;
+            justify-content: center;
+        }
+        .copy-button:hover {
+            background-color: #24863C;
+        }
+        .copy-button i {
+            font-size: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .copy-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Оплата квитка Яктак</h1>
+        
+        <div class="form-group">
+            <label for="email">Ваш Email</label>
+            <input type="email" id="email" placeholder="Введіть ваш email">
+            <span class="error" id="email-error">Будь ласка, введіть коректний email</span>
+        </div>
+        
+        <div class="form-group">
+            <label for="ticket-type">Виберіть тип квитка</label>
+            <select id="ticket-type" onchange="updatePrice()">
+                <option value="1090">Фан-зона (1090₴)</option>
+                <option value="650">Трибуни (650₴)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Реквізити для переведення</label>
+            <div class="copy-container">
+                <input type="text" id="bank-details" value="5375524000474960" readonly>
+                <button class="copy-button" onclick="copyToClipboard()">
+                    <i class="fas fa-copy"></i> Копіювати
+                </button>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Сума переведення</label>
+            <input type="text" id="ticket-price" value="1090₴" readonly>
+        </div>
+        
+        <div class="form-group">
+            <label for="receipt">Прикріпіть квитанцію</label>
+            <input type="file" id="receipt" accept="image/*,.pdf">
+            <span class="error" id="receipt-error">Будь ласка, завантажте квитанцію</span>
+        </div>
+        
+        <button type="button" onclick="validateForm()">
+            <i class="fas fa-paper-plane"></i> Відправити квитанцію
+        </button>
+        
+        <p id="success-message" style="color: green; text-align: center; margin-top: 20px; display: none; font-weight: bold;">✅ Ваша квитанція на перевірці. З вами зв'яжуться протягом 24 годин.</p>
+    </div>
+
+    <script>
+        function updatePrice() {
+            const ticketType = document.getElementById('ticket-type').value;
+            document.getElementById('ticket-price').value = ticketType + "₴";
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const email = document.getElementById('email').value.trim();
+            const receipt = document.getElementById('receipt').files.length;
+            
+            if (!email || !email.includes('@')) {
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('email-error').style.display = 'none';
+            }
+
+            if (receipt === 0) {
+                document.getElementById('receipt-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('receipt-error').style.display = 'none';
+            }
+
+            if (isValid) {
+                document.getElementById('success-message').style.display = 'block';
+            }
+        }
+
+        function copyToClipboard() {
+            const copyText = document.getElementById('bank-details');
+            copyText.select();
+            document.execCommand("copy");
+            alert("Реквізити скопійовано!");
+        }
+    </script>
+</body>
+</html>
+
